@@ -166,10 +166,6 @@ contract Election {
         require(!voter.isVerified, "Already voted.");
         require(_index < candidates.length, "Candidate does not exist.");
         voter.voted = true;
-
-        // If 'candidate' is out of the range of the array,
-        // this will throw automatically and revert all
-        // changes.
         candidates[_index].voteCount += 1;
     }
 
