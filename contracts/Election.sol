@@ -9,14 +9,13 @@ import "./Types.sol";
 contract Election {
     address private admin; //admin for this contract
 
-    // basic structure of a candidate
-
     string private electionName;
     string private description;
     string private constituencyName;
     uint private startDateTime; //Unix timestamp
     uint private endDateTime; //Unix timestamp
     Types.Candidate[] private candidates; //Array collection to store multiple candidates
+    Types.Identity[] private voters;
     bool isWinnerDetermined = false; //a flag to confirmed election officer has tally the vote count and officially determine the winner after the election period is over
     uint private winnerIndex = type(uint).max; //set winnerIndex to maximum value to be extra safe
 
@@ -170,8 +169,6 @@ contract Election {
     }
 
     // Function to get turn out rate
-    Types.Identity[] public voters;
-
     function getTurnout() public view returns (uint) {
         uint voted = 0;
         uint totalEligibleVoters = voters.length;
