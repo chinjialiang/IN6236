@@ -1,14 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract IdentityVerification {
-    struct Identity {
-        string fullName;
-        uint256 idNumber;
-        bool isVerified;
-    }
+import "./Types.sol";
 
-    mapping(address => Identity) public identities;
+contract IdentityVerification {
+    mapping(address => Types.Identity) public identities;
 
     event IdentityVerified(address indexed user);
 
@@ -23,11 +19,14 @@ contract IdentityVerification {
         admin = msg.sender;
     }
 
-    function registerIdentity(string memory _fullName, uint256 _idNumber) external {
+    function registerIdentity(
+        string memory _fullName,
+        uint256 _idNumber
+    ) external {
         require(_idNumber > 0, "ID number must be greater than zero");
         require(bytes(_fullName).length > 0, "Full name must not be empty");
 
-        identities[msg.sender] = Identity({
+        identities[msg.sender] = Types.Identity({
             fullName: _fullName,
             idNumber: _idNumber,
             isVerified: false
@@ -35,7 +34,7 @@ contract IdentityVerification {
     }
 
     function verifyIdentity(address _user) external onlyAdmin {
-        Identity storage identity = identities[_user];
+        Types.Identity storage identity = identities[_user];
         require(bytes(identity.fullName).length > 0, "Identity not registered");
         require(identity.idNumber > 0, "Invalid ID number");
         require(!identity.isVerified, "Identity already verified");
@@ -44,8 +43,10 @@ contract IdentityVerification {
         emit IdentityVerified(_user);
     }
 
-    function getIdentity(address _user) external view returns (string memory, uint256, bool) {
-        Identity memory identity = identities[_user];
+    function getIdentity(
+        address _user
+    ) external view returns (string memory, uint256, bool) {
+        Types.Identity memory identity = identities[_user];
         return (identity.fullName, identity.idNumber, identity.isVerified);
     }
 }
