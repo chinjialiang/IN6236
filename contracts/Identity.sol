@@ -29,7 +29,8 @@ contract IdentityVerification {
         identities[msg.sender] = Types.Identity({
             fullName: _fullName,
             idNumber: _idNumber,
-            isVerified: false
+            isVerified: false,
+            voted: false
         });
     }
 

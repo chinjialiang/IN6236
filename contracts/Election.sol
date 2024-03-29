@@ -158,6 +158,37 @@ contract Election {
         );
     }
 
+    // Function to cast vote
+    function vote(uint _index) public {
+        Types.Identity memory voter = voters[_index];
+        require(block.timestamp >= startDateTime, "Election has not started.");
+        require(block.timestamp <= endDateTime, "Election has ended.");
+        require(!voter.isVerified, "Already voted.");
+        require(_index < candidates.length, "Candidate does not exist.");
+        voter.voted = true;
+
+        // If 'candidate' is out of the range of the array,
+        // this will throw automatically and revert all
+        // changes.
+        candidates[_index].voteCount += 1;
+    }
+
+    // Function to get turn out rate
+    Types.Identity[] public voters;
+
+    function getTurnout() public view returns (uint) {
+        uint voted = 0;
+        uint totalEligibleVoters = voters.length;
+
+        for (uint i = 0; i < voters.length; i++) {
+            if (voters[i].voted == true) {
+                voted += 1;
+            }
+        }
+
+        return voted / totalEligibleVoters;
+    }
+
     // Consider adding more functions as needed, e.g., for getting candidate details, election results, etc.
 
     /* Generated code that might be useful, remove before deployment 

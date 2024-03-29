@@ -6,6 +6,7 @@ library Types {
         string fullName;
         uint256 idNumber;
         bool isVerified;
+        bool voted;
     }
 
     struct Candidate {
